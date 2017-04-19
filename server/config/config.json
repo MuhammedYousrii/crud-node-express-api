@@ -7,8 +7,7 @@
         "PORT" : 3000 ,
         "MONGODB_URI" : "mongodb://localhost:27017/todoAppTest" 
     },
-    "production" : {
-        "PORT" : "process.env.PORT" , 
+    "production" : { 
         "MONGODB_URI" : "mongodb://muhammedyousrii:2251365478@ds161410.mlab.com:61410/crudexpresstodoapi" 
     }
 }
