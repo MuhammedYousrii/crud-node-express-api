@@ -5,6 +5,11 @@ const {ObjectID} = require('mongodb');
 
 
 
+// Import & Fire Configruation methods
+const config = require('./config/config.js')
+config.serverConfig(TodoApp , express);
+const port =  process.env.PORT;
+
 
 // Our MongooseDB , Models Config Importaion
 const {mongoose , Schema} = require('./db-config/mongoose');
@@ -14,23 +19,22 @@ const {TODO} = require('./models/todo');
 
 
 
-// Import & Fire Configruation methods
-const config = require('./config/config')
-config.serverConfig(TodoApp , express);
-const port =  process.env.PORT   ;
 
 
 
 
-
+// i've To Host With Two Environment one To Develop and Another For Production  
+// production one -->  still-island-16985.herokuapp.com
+// develop one --> localhost
 
 
 // Create Utility Decitions To Determine Sites that Can Use those apis
 TodoApp.use((req , res , next) => {
     if (req.protocol == "http" || req.protocol == "https"){
         if (config.apiMethods.indexOf(req.method) !== -1){
-            console.log(req.hostname);
-            return next();
+            if(req.hostname == "localhost" || req.hostname == "still-island-16985.herokuapp.com"){
+                return next();
+            }
         }
     }
 
