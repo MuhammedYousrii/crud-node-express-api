@@ -25,7 +25,7 @@ const serverConfig  = (app , framework) => {
     console.log(`Current Env is ****** ${env}`);
 
     
-    if(env === "development" || env === "test"){
+    if(env === "development" || env === "test" || env === "production"){
         var configList = require('./config.json');
         var envConfig = configList[env];
         

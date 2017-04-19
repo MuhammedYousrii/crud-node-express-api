@@ -6,10 +6,9 @@ const {ObjectID} = require('mongodb');
 
 
 // Import & Fire Configruation methods
-const config = require('./config/config.js')
+const config = require('./config/config')
 config.serverConfig(TodoApp , express);
 const port =  process.env.PORT;
-
 
 // Our MongooseDB , Models Config Importaion
 const {mongoose , Schema} = require('./db-config/mongoose');
