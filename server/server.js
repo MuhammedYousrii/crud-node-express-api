@@ -1,37 +1,34 @@
 // third-part Modules requireation 
 const express = require('express');
-const bodyParser = require('body-parser');
-const {ObjectID} = require('mongodb'); 
-const hbs = require('hbs');
+const TodoApp = express();
+const {ObjectID} = require('mongodb');
 
 
 
-// Our Modules Importaion
+
+// Our MongooseDB , Models Config Importaion
 const {mongoose , Schema} = require('./db-config/mongoose');
 const {USER} = require('./models/user');
 const {TODO} = require('./models/todo');
 
-//avalibales Methods For Dealing With this Api
-const apiMethods = ['GET' , 'POST' , 'DELETE' , 'UPDATE'];
-
-
-const port = process.env.PORT || 3000 ;
-
-//Our Express APP
-const TodoApp = express();
 
 
 
+// Import & Fire Configruation methods
+const config = require('./config/config')
+config.serverConfig(TodoApp , express);
+const port =  process.env.PORT ;
 
-//Express MiddleWares Expression
-TodoApp.use(bodyParser.json());
-TodoApp.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
+
+
+
 
 
 // Create Utility Decitions To Determine Sites that Can Use those apis
 TodoApp.use((req , res , next) => {
     if (req.protocol == "http" || req.protocol == "https"){
-        if (apiMethods.indexOf(req.method) !== -1){
+        if (config.apiMethods.indexOf(req.method) !== -1){
             if(req.hostname == "localhost"){
                 return next();
             }
@@ -39,22 +36,15 @@ TodoApp.use((req , res , next) => {
     }
 
     
-    req.baseUrl
     res.status(400).send({
         "error " : true ,
         "message" : `Api Didn't Support this Method ${req.method}`,
         "help" : `you should One Of those Methods Only ${apiMethods}`,
     });
+    
+
 
 });
-
-
-
-
-
-TodoApp.set('view engine', 'hbs');
-
-
 
 
 
