@@ -4,15 +4,17 @@
   "description": "Create RestfulApi",
   "main": "server.js",
   "scripts": {
-    "test":  "mocha server/**/*.test.js" ,
-    "test-w" : "nodemon --exec \" npm run test \" " ,
-    "fire-server" : "nodemon server/server.js  " 
+    "test": "mocha server/**/*.test.js",
+    "test-w": "nodemon --exec \" npm run test \" ",
+    "fire-server": "nodemon server/server.js  ",
+    "start": "node server/server.js"
   },
   "author": "Muhammed Yousrii",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
+    "hbs": "^4.0.1",
     "mongodb": "^2.2.5",
     "mongoose": "^4.9.3"
   },
