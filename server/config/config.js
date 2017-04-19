@@ -23,17 +23,9 @@ const serverConfig  = (app , framework) => {
     
     
     console.log(`Current Env is ****** ${env}`);
-//    
-//    if(env === "development"){
-//        
-//        process.env.PORT= 3000 ;
-//        process.env.MONGOURI = "http://localhost:27017/todoApp";
-//    }else if (env === "test"){
-//        process.env.PORT= 3000 ;
-//        process.env.MONGOURI = "http://localhost:27017/todoApp";
-//    }
+
     
-    if(env === "development" || env === "test" || env === "production"){
+    if(env === "development" || env === "test"){
         var configList = require('./config.json');
         var envConfig = configList[env];
         
