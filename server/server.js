@@ -2,6 +2,7 @@
 const express = require('express');
 const TodoApp = express();
 const {ObjectID} = require('mongodb');
+const _ = require('lodash');
 
 
 
@@ -165,6 +166,48 @@ TodoApp.delete('/todos/:id' , (req , res ) => {
 }) 
 
 
+
+
+//Update by Spefic id 
+TodoApp.patch('/todos/:id?' , (req , res) => {
+    var id = req.params.id ;
+    
+    var reqBody = _.pick(req.body , ['text' , 'completed']);
+    
+    if(!ObjectID.isValid(id)){
+        return res.status(400).send({
+            error : true ,
+            "message" : "is Danger NotValid Id" ,
+            "help" : "try Agian with Another ID"
+        })
+    }
+    
+    if(_.isBoolean(reqBody.completed) && reqBody.completed){
+        reqBody.completedAt = new Date().getTime() ;
+    }else {
+        reqBody.complete = false ;
+        reqBody.completedAt = null ;
+    }
+    
+    
+    
+    
+    TODO.findByIdAndUpdate(id , {$set : reqBody} , {new : true}).then(doc => {
+        if(!doc){
+            return res.status(404).send({
+                "error" : false ,
+                "warning" : true ,
+                "message" : "Unable To Find Todos With This Id"
+            })
+        }
+        
+        
+        res.status(200).send({doc})
+    }).catch(e => {
+        return res.status(500).send(e);
+    })
+    
+})
 
 
 

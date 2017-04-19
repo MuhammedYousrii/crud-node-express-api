@@ -6,7 +6,7 @@ const hbs = require('hbs');
 
 
 
-const apiMethods = ['GET' , 'POST' , 'DELETE' , 'UPDATE'];
+const apiMethods = ['GET' , 'POST' , 'DELETE' , 'PATCH'];
 
 
 
