@@ -17,7 +17,7 @@ const {TODO} = require('./models/todo');
 // Import & Fire Configruation methods
 const config = require('./config/config')
 config.serverConfig(TodoApp , express);
-const port =  process.env.PORT ;
+const port =  process.env.PORT   ;
 
 
 
@@ -29,9 +29,8 @@ const port =  process.env.PORT ;
 TodoApp.use((req , res , next) => {
     if (req.protocol == "http" || req.protocol == "https"){
         if (config.apiMethods.indexOf(req.method) !== -1){
-            if(req.hostname == "localhost"){
-                return next();
-            }
+            console.log(req.hostname);
+            return next();
         }
     }
 
