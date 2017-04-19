@@ -9,6 +9,9 @@
     "fire-server": "nodemon server/server.js  ",
     "start": "node server/server.js"
   },
+    "engines" : {
+        "node" : "6.10.1" ,
+    },
   "author": "Muhammed Yousrii",
   "license": "ISC",
   "dependencies": {

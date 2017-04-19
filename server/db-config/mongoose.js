@@ -6,9 +6,14 @@ const dbUsername = 'muhammedyousrii';
 const dbPassword = '251365478';
 
 mongoose.Promise = global.Promise ;
-mongoose.connect(`mongodb://<${dbUsername}>:<${dbPassword}>@ds161410.mlab.com:61410/crudexpresstodoapi `
-                 ||
-                 'mongodb://localhost:27017/todoApp');
+if(mongoose.connect(process.env.MONGOURI ||'mongodb://localhost:27017/todoApp'))
+{
+    console.log('connected')
+    console.log(process.env.MONGOURI);
+}
+
+
+
 
 
 module.exports = {
