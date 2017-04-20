@@ -7,8 +7,8 @@ const _ = require('lodash');
 
 
 // Import & Fire Configruation methods
-const config = require('./config/config')
-config.serverConfig(TodoApp , express);
+const {serverConfig ,apiMethods , bugsMessages } = require('./config/config')
+serverConfig(TodoApp , express);
 const port =  process.env.PORT;
 
 // Our MongooseDB , Models Config Importaion
@@ -31,7 +31,7 @@ const {TODO} = require('./models/todo');
 // Create Utility Decitions To Determine Sites that Can Use those apis
 TodoApp.use((req , res , next) => {
     if (req.protocol == "http" || req.protocol == "https"){
-        if (config.apiMethods.indexOf(req.method) !== -1){
+        if (apiMethods.indexOf(req.method) !== -1){
             if(req.hostname == "localhost" || req.hostname == "still-island-16985.herokuapp.com"){
                 return next();
             }
@@ -39,11 +39,7 @@ TodoApp.use((req , res , next) => {
     }
 
     
-    res.status(400).send({
-        "error " : true ,
-        "message" : `Api Didn't Support this Method ${req.method}`,
-        "help" : `you should One Of those Methods Only ${apiMethods}`,
-    });
+    res.status(503).json(bugsMessages.apiBreakDown);
     
 
 
@@ -93,11 +89,7 @@ TodoApp.get('/todos/:id?' , (req , res) => {
     if(checkIdValid){
         TODO.findById(id).then(todo => {
             if(!todo){
-                return res.status(404).send ({
-                    "error" : true ,
-                    "message" : "Element With this Id Not Found At DB"  ,
-                    "help" : "Check Your Id Then tryAgain"
-                });
+                return res.status(404).json(bugsMessages.notFound);
             }
             return res.status(200).send({todo});
         }).catch(e =>  { 
@@ -105,11 +97,7 @@ TodoApp.get('/todos/:id?' , (req , res) => {
         })
     }
     else {
-        return res.status(400).send({
-            "error" : true ,
-            "message" : "Not Valid Id Strcture" ,
-            "help" : "Try Another Time With another one ",
-        })
+        return res.status(400).json(bugsMessages.inValidId)
     }
     
 })
@@ -142,20 +130,12 @@ TodoApp.delete('/todos/:id' , (req , res ) => {
     var checkValid = ObjectID.isValid(todoID);
     
     if(!checkValid){
-        return res.status(400).send({
-            "error" : true ,
-            "message" : "Todo Id Is Not Valid" ,
-            "help" : "Try Again with Different id ",
-        })
+        return res.status(400).json(bugsMessages.inValidId)
     }
     
     TODO.findByIdAndRemove(todoID).then(docs => {
        if(!docs){
-           return res.status(404).send({
-               "error" : false ,
-               "warning" : true ,
-               "Message" : "We Can't Find Todos With This id" ,
-           })
+           return res.status(404).json(bugsMessages.notFound);
        }
        res.status(200).send(docs); 
         
@@ -175,11 +155,7 @@ TodoApp.patch('/todos/:id?' , (req , res) => {
     var reqBody = _.pick(req.body , ['text' , 'completed']);
     
     if(!ObjectID.isValid(id)){
-        return res.status(400).send({
-            error : true ,
-            "message" : "is Danger NotValid Id" ,
-            "help" : "try Agian with Another ID"
-        })
+        return res.status(400).json(bugsMessages.inValidId)
     }
     
     if(_.isBoolean(reqBody.completed) && reqBody.completed){
@@ -194,11 +170,7 @@ TodoApp.patch('/todos/:id?' , (req , res) => {
     
     TODO.findByIdAndUpdate(id , {$set : reqBody} , {new : true}).then(doc => {
         if(!doc){
-            return res.status(404).send({
-                "error" : false ,
-                "warning" : true ,
-                "message" : "Unable To Find Todos With This Id"
-            })
+            return res.status(404).json(bugsMessages.notFound);
         }
         
         
@@ -208,6 +180,7 @@ TodoApp.patch('/todos/:id?' , (req , res) => {
     })
     
 })
+
 
 
 
