@@ -4,7 +4,7 @@
   "description": "Create Crud API That Can Return Json Or HTML Depend On Agent moral With flexbility of routes",
   "main": "server.js",
   "scripts": {
-    "test": "export NODE_ENV = test || SET \"NODE_ENV = test\" && mocha server/**/*.test.js",
+    "test": " SET \"NODE_ENV=test\" && mocha server/**/*.test.js",
     "test-w": "nodemon --exec \" npm run test \" ",
     "fire-server": "nodemon server/server.js  ",
     "start": "node server/server.js"

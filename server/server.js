@@ -29,24 +29,24 @@ const {TODO} = require('./models/todo');
 
 
 // Create Utility Decitions To Determine Sites that Can Use those apis
-TodoApp.use((req , res , next) => {
-    if (req.protocol == "http" || req.protocol == "https"){
-        if (apiMethods.indexOf(req.method) !== -1){
-            if(req.hostname == "localhost" || req.hostname == "still-island-16985.herokuapp.com"){
-                return next();
-            }
-        }
-    }
-
-    
-    res.status(503).json(bugsMessages.apiBreakDown);
-    
-
-
-});
-
-
-
+//TodoApp.use((req , res , next) => {
+//    if (req.protocol == "http" || req.protocol == "https"){
+//        if (apiMethods.indexOf(req.method) !== -1){
+//            if(req.hostname == "localhost" || req.hostname == "still-island-16985.herokuapp.com"){
+//                return next();
+//            }
+//        }
+//    }
+//
+//    
+//    res.status(503).json(bugsMessages.apiBreakDown);
+//    
+//
+//
+//});
+//
+//
+//
 
 
 // Queries Depends on Routes    
@@ -59,9 +59,8 @@ TodoApp.post('/todos' , (req , res) => {
     
     
     newTodo.save().then(docs => {
-        res.send(docs);
-    })
-        .catch(e => {
+        res.status(200).send({docs});
+    }).catch(e => {
         res.status(400).send(e);
     })
 });
@@ -75,7 +74,7 @@ TodoApp.post('/todos' , (req , res) => {
 TodoApp.get('/todos' , (req , res) => {
     
     TODO.find({}).then(docs => {
-        res.send({docs});
+        res.status(200).send({docs});
     }).catch(e => {
         res.status(400).send(e);
     })
