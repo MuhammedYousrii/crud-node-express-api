@@ -11,42 +11,26 @@ const {serverConfig ,apiMethods , bugsMessages } = require('./config/config')
 serverConfig(TodoApp , express);
 const port =  process.env.PORT;
 
+
+
 // Our MongooseDB , Models Config Importaion
 const {mongoose , Schema} = require('./db-config/mongoose');
 const {USER} = require('./models/user');
 const {TODO} = require('./models/todo');
 
 
+//Import Our Middleware Functions 
+const {apiAuth} = require('./middlewares/apiAuth');
+const {routeAuth} = require('./middlewares/routeAuth');
+
+
+//Fire ApiAuth Middleware
+TodoApp.use(apiAuth);
 
 
 
 
 
-
-// i've To Host With Two Environment one To Develop and Another For Production  
-// production one -->  still-island-16985.herokuapp.com
-// develop one --> localhost
-
-
-// Create Utility Decitions To Determine Sites that Can Use those apis
-//TodoApp.use((req , res , next) => {
-//    if (req.protocol == "http" || req.protocol == "https"){
-//        if (apiMethods.indexOf(req.method) !== -1){
-//            if(req.hostname == "localhost" || req.hostname == "still-island-16985.herokuapp.com"){
-//                return next();
-//            }
-//        }
-//    }
-//
-//    
-//    res.status(503).json(bugsMessages.apiBreakDown);
-//    
-//
-//
-//});
-//
-//
-//
 
 
 // Queries Depends on Routes    
@@ -182,6 +166,38 @@ TodoApp.patch('/todos/:id?' , (req , res) => {
 
 
 
+const authnicate  = (req ,  res , next) => {
+    console.log('iam the one');
+}
+
+
+
+
+
+TodoApp.post('/users' , (req , res) => {
+    var reqBody = _.pick(req.body , ['email' , 'password']);
+    
+    var newUser = new USER({
+        "email" : reqBody.email ,
+        "password" : reqBody.password 
+    });
+    
+    newUser.save().then(() => {
+        return newUser.genAuthToken();
+    }).then(token => {
+        res.header('x-auth' , token).send({newUser})
+    }).catch(e => {
+        res.status(400).send(e)
+    })
+})
+
+TodoApp.get('/users/me' , routeAuth  ,(req , res) => {
+    
+        console.log(req.user);
+
+        res.status(200).send(req.user);
+        
+})
 
 
 

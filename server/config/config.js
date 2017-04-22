@@ -20,6 +20,13 @@ const bugsMessages = {
         "help" : "Please Try Again With Correct One"
     },
     
+    'notAuth' : {
+        'danger' : true ,
+        'error' : false ,
+        'warning' : 'true',
+        'dangerMessage' : 'not authorized , InvalidTokens'
+    } ,
+    
     "apiBreakDown" : {
         "error" : true ,
         "warning" : true ,
@@ -32,11 +39,13 @@ const bugsMessages = {
 
 
 
-
 const serverConfig  = (app , framework) => {
 
     
-    
+    // i've To Host With Three Environment one To Develop and Another For Production  
+    // production one -->  still-island-16985.herokuapp.com
+    // develop one --> localhost
+    // test one --> localhost
     // Config The Env And Specfie  right URL For It .. 
     var env = process.env.NODE_ENV || "development" ;
     
@@ -62,14 +71,14 @@ const serverConfig  = (app , framework) => {
 
 
     //Express MiddleWares Configs Expression To Set Defaults
-    app.use(framework.static(__dirname + '/public'));
+    app.use(framework.static(__dirname + 'view/public'));
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
     
     
     
     
-    app.set('views', __dirname + '/views');
+    app.set('views', __dirname + '/view');
     app.set('view engine', 'hbs');
     
     
