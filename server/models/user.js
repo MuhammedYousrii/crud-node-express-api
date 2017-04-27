@@ -2,6 +2,7 @@ const {mongoose , Schema} = require('../db-config/mongoose.js');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
+const bcryptJS = require('bcryptjs');
 
 
 
@@ -28,7 +29,8 @@ const USERSCHEMA = new Schema ({
         type : String ,
         required : true ,
         minlength : 5 ,
-        trim : true
+        trim : true ,
+        unique : true ,
     },
 
     tokens : [{
@@ -60,6 +62,9 @@ USERSCHEMA.methods.toJSON = function (){
     return clientObj ;
     
 }
+
+
+
 USERSCHEMA.methods.genAuthToken = function(){
     // self Mean The new User Document Sended From Client And Set To USERMODEL
     let self = this ;
@@ -73,6 +78,9 @@ USERSCHEMA.methods.genAuthToken = function(){
         return token;
     });
 };
+
+
+
 USERSCHEMA.statics.findByToken = function (token){
     var USER = this ;
     var decoded ;
@@ -100,6 +108,31 @@ USERSCHEMA.statics.findByToken = function (token){
     
     return authUser ;
 }
+
+
+
+USERSCHEMA.pre('save' , function(next){
+    const self = this ;
+    var modfied = self.isModified('password');
+    
+    
+    if(modfied){
+        bcryptJS.genSalt(10 , (err , salt) => {
+            if(err){return next(err);}
+            
+            bcryptJS.hash(self.password , salt , (err , hashedPasswored) => {
+             
+                if (err){return next(err);}   
+                self.password = hashedPasswored ;
+                next();
+            })
+        })
+    }else {
+        next();    
+    }
+    
+    
+})
 
 
 

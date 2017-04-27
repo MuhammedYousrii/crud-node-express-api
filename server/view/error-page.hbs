@@ -1,15 +1,67 @@
 <!DOCTYPE html>
 <html lang="en-us">
+    <head>
+    
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        
+        <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+    </head>
     <body>
-        <h1>
-            Erorr Case :: {{error}}
-        </h1>
+        
+        <div class="container">
+            <div class="row">
+                
+                <section id="error-showcase">
+                
+                    <header>
+                        <h1>Status Code</h1>
+                        
 
+                        
+                        
+                        {{#if error}}
+                            <p> Error Message :: {{errorMessage}} </p>
+                        {{else}}
+                            <p> warnign Message :: {{warningMessage}} </p>
+                        {{/if}}
+                        
+                        
+                        
+                        
 
-        <p> Erorr Message :: {{message}} </p>
+                    </header>
+                    
+                    
+                    <div class="error-body">
+                        <p>What You Can Do OR What should You DO ??? </p>
+                        <p>{{help}}</p>
+                    </div>
+                    
+                </section>
+                
+            
+        
+                
+            </div>
+        
+        
+        
+        
+    
+        
+        
+        </div>
+        
 
-
-        <p>Help Message :: {{help}}</p>
+        <script
+			  src="https://code.jquery.com/jquery-3.2.1.min.js"
+			  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+			  crossorigin="anonymous">
+        </script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     
     </body>
 </html>

@@ -6,11 +6,12 @@ const _ = require('lodash');
 
 
 
-// Import & Fire Configruation methods
-const {serverConfig ,apiMethods , bugsMessages } = require('./config/config')
-serverConfig(TodoApp , express);
-const port =  process.env.PORT;
 
+// Import & Fire Configruation methods
+const {envConfig , expressConfig , apiMethods , bugsMessages } = require('./config/config')
+envConfig();
+expressConfig(TodoApp , express);
+const port =  process.env.PORT;
 
 
 // Our MongooseDB , Models Config Importaion
@@ -30,6 +31,17 @@ TodoApp.use(apiAuth);
 
 
 
+
+
+
+TodoApp.get('/' , (req , res) => {
+    res.status(200).render('index');
+})
+
+
+TodoApp.get('/error-page' , (req , res) => {
+    res.status(503).render('error-page' , bugsMessages.notFound);
+})
 
 
 
@@ -166,12 +178,6 @@ TodoApp.patch('/todos/:id?' , (req , res) => {
 
 
 
-const authnicate  = (req ,  res , next) => {
-    console.log('iam the one');
-}
-
-
-
 
 
 TodoApp.post('/users' , (req , res) => {
@@ -193,8 +199,6 @@ TodoApp.post('/users' , (req , res) => {
 
 TodoApp.get('/users/me' , routeAuth  ,(req , res) => {
     
-        console.log(req.user);
-
         res.status(200).send(req.user);
         
 })
