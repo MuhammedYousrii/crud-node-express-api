@@ -1,16 +1,27 @@
-// third-part Modules requireation 
+// Import Express Module From Node_modules
 const express = require('express');
+// declare App EQ To Express MainFunction That Give it access To all features
 const TodoApp = express();
+//Import ObjectID Class From MongoDB Drive
 const {ObjectID} = require('mongodb');
+//Import Lodash utilites From Node_Modules
 const _ = require('lodash');
 
 
 
 
 // Import & Fire Configruation methods
-const {envConfig , expressConfig , apiMethods , bugsMessages } = require('./config/config')
+const { envConfig ,
+        expressConfig ,
+        apiMethods ,
+        bugsMessages } = require('./config/config');
+
+//Fire Environment Configuration Controller
 envConfig();
+//Fire Express Server Configuration Controller
 expressConfig(TodoApp , express);
+
+
 const port =  process.env.PORT;
 
 
@@ -25,7 +36,7 @@ const {apiAuth} = require('./middlewares/apiAuth');
 const {routeAuth} = require('./middlewares/routeAuth');
 
 
-//Fire ApiAuth Middleware
+//Use APiAUth As Default Middleware To protect Our services
 TodoApp.use(apiAuth);
 
 
@@ -45,18 +56,24 @@ TodoApp.get('/error-page' , (req , res) => {
 
 
 
-// Queries Depends on Routes    
+
+// Queries Depends on Routes
+//Recive Post Req From Client    
 TodoApp.post('/todos' , (req , res) => {
-    var newTodo = new TODO ({
+    //Create New Todo Modle From Master TODO Model With ClientReq Data 
+    let newTodo = new TODO ({
         "text" : req.body.text ,
         "completed" : req.body.completed ,
         "completedAt" : req.body.completedAt
     });
     
     
+    //Save It To DB
     newTodo.save().then(docs => {
+        //If Done Send Ok Message
         res.status(200).send({docs});
     }).catch(e => {
+        //Else erros send BadReq Massege
         res.status(400).send(e);
     })
 });
@@ -67,25 +84,39 @@ TodoApp.post('/todos' , (req , res) => {
 
 
 //Get All Todos From Database
+//Recive Get Req From Client
 TodoApp.get('/todos' , (req , res) => {
-    
+    //Find All Todos In Collections 
     TODO.find({}).then(docs => {
+        // If Done Send Ok Messages
         res.status(200).send({docs});
     }).catch(e => {
+        //else errors Send badreq 
         res.status(400).send(e);
     })
     
 });
+
+
+
 // Get speific Todo with it's id
+//recive Get Req With Id Params
 TodoApp.get('/todos/:id?' , (req , res) => {
+    //pick Param Val
     var id = req.params.id ;
+    //check if ID Valid
     var checkIdValid = ObjectID.isValid(id);
     
+    //If Valid
     if(checkIdValid){
+        // Go Search into Coll's find Todo With this id  
         TODO.findById(id).then(todo => {
+            //If Not Found
             if(!todo){
+                //respond With NotFound Message
                 return res.status(404).json(bugsMessages.notFound);
             }
+            //If Done respond With Ok Message
             return res.status(200).send({todo});
         }).catch(e =>  { 
             return res.status(400).send(e)

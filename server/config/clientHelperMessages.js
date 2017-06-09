@@ -1,9 +1,10 @@
+//Provide Array Of Avalibles apis that Supported by this service
 const apiMethods = ['GET' , 'POST' , 'DELETE' , 'PATCH'];
 
 
 
 
-
+// List Of Bugs Messges That Sent To client in different cases to Provide good feedback
 const bugsMessages = {
     "inValidId" : {
         "error" : true ,
@@ -42,7 +43,7 @@ const bugsMessages = {
 
 
 
-
+//Export those data To outside
 module.exports = {
     apiMethods ,
     bugsMessages
